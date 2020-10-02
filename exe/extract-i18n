@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
+require 'extract_i18n/cli'
+
+result = ExtractI18n::CLI.new.run
+exit(result ? 0 : 1)
