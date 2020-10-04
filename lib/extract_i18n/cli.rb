@@ -50,10 +50,11 @@ module ExtractI18n
 
     def process_file(file_path)
       puts "Processing: #{file_path}"
-      ExtractI18n::FileProcessor.new(
+      ExtractI18n::Processor.new(
         file_path: file_path,
         write_to: @options[:write_to],
-        locale: @options[:locale]
+        locale: @options[:locale],
+        options: @options,
       ).run
     end
   end

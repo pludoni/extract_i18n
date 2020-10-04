@@ -3,9 +3,10 @@ require 'tty-prompt'
 require 'pry'
 require 'pastel'
 require 'yaml'
+require 'extract_i18n/source_change'
 
 module ExtractI18n
-  class Transform < Parser::TreeRewriter
+  class Rewriter < Parser::TreeRewriter
     IGNORE_HASH_KEYS = %w[class_name foreign_key join_table association_foreign_key key].freeze
     IGNORE_FUNCTIONS = %w[where order group select sql].freeze
     IGNORELIST = [
@@ -15,12 +16,10 @@ module ExtractI18n
     PROMPT = TTY::Prompt.new
     PASTEL = Pastel.new
 
-    def initialize(file_key:, always_yes: false)
+    def initialize(file_key:, on_ask:)
       @file_key = file_key
-      @i18n_changes = {}
-      @always_yes = always_yes
+      @on_ask = on_ask
     end
-    attr_reader :i18n_changes
 
     def process(node)
       @nesting ||= []
@@ -62,25 +61,15 @@ module ExtractI18n
     private
 
     def ask_and_continue(i18n_key:, i18n_string:, interpolate_arguments: {}, node:)
-      key = "#{@file_key}.#{i18n_key}"
-      arguments = if interpolate_arguments.keys.length > 0
-                    ", " + interpolate_arguments.map { |k, v| "#{k}: (#{v})" }.join(', ')
-                  else
-                    ""
-                  end
-      i18n_t = %{I18n.t("#{key}"#{arguments})}
-
-      unless @always_yes
-        log PASTEL.cyan("replace:  ") + PASTEL.blue(node.location.expression.source_line).
-          gsub(node.loc.expression.source, PASTEL.red(node.loc.expression.source))
-        log PASTEL.cyan("with:     ") + PASTEL.blue(node.location.expression.source_line).
-          gsub(node.loc.expression.source, PASTEL.green(i18n_t))
-        log PASTEL.cyan("add i18n: ") + PASTEL.blue("#{key}: #{i18n_string}")
-      end
-
-      if @always_yes || !PROMPT.no?("Proceed?")
-        @i18n_changes[key] = i18n_string
-        replace_content(node, i18n_t)
+      change = ExtractI18n::SourceChange.new(
+        i18n_key: "#{@file_key}.#{i18n_key}",
+        i18n_string: i18n_string,
+        interpolate_arguments: interpolate_arguments,
+        source_line: node.location.expression.source_line,
+        remove: node.loc.expression.source
+      )
+      if @on_ask.call(change)
+        replace_content(node, change.i18n_t)
       end
     end
 

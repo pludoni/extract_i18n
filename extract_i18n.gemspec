@@ -26,6 +26,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'parser', '>= 2.6'
+  spec.add_runtime_dependency 'slim'
+  spec.add_runtime_dependency 'zeitwerk'
   spec.add_runtime_dependency 'tty-prompt'
   spec.add_dependency "diff-lcs"
   spec.add_dependency "diffy"

@@ -1,6 +1,4 @@
-require 'extract_i18n/file_processor'
-
-RSpec.describe ExtractI18n::FileProcessor do
+RSpec.describe ExtractI18n::Adapters::RubyAdapter do
   specify 'normal string' do
     file = <<~DOC
       a = "Hallo Welt"
@@ -70,12 +68,12 @@ RSpec.describe ExtractI18n::FileProcessor do
   end
 
   def run(string, file_key = 'models.foo')
-    temp = Parser::CurrentRuby.parse(string)
-    rewriter = ExtractI18n::Transform.new(file_key: file_key, always_yes: true)
-    buffer = Parser::Source::Buffer.new('(example)')
-    buffer.source = string
-
-    output = rewriter.rewrite(buffer, temp)
-    [output, rewriter.i18n_changes]
+    i18n_changes = {}
+    adapter = ExtractI18n::Adapters::RubyAdapter.new(
+      file_key: file_key,
+      on_ask: ->(change) { i18n_changes[change.key] = change.i18n_string; true }
+    )
+    output = adapter.run(string)
+    [output, i18n_changes]
   end
 end

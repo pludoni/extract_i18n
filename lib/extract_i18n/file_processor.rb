@@ -1,39 +1,69 @@
-require 'extract_i18n/transform'
+# frozen_string_literal: true
+
 require 'parser/current'
+require 'tty/prompt'
 require 'diffy'
 
 module ExtractI18n
   class FileProcessor
     PROMPT = TTY::Prompt.new
+    STRIP_PATH = %r{^app/|\.rb|^lib/$}.freeze
 
-    def initialize(file_path:, write_to:, locale:)
+    def initialize(file_path:, write_to:, locale:, options: {})
       @file_path = file_path
-      @file_key = @file_path.gsub(%r{^app/|\.rb|^lib/$}, '').gsub('/', '.')
+      @file_key = @file_path.gsub(STRIP_PATH, '').gsub('/', '.')
       @locale = locale
       @write_to = write_to
+      @options = options
+      @i18n_changes = {}
     end
 
     def run
       puts " reading #{@file_path}"
-      read_and_transform do |result, i18n_changes|
+      read_and_transform do |result|
         puts Diffy::Diff.new(original_content, result, context: 1).to_s(:color)
         if PROMPT.yes?("Save changes?")
           File.write(@file_path, result)
           update_i18n_yml_file(i18n_changes)
-          puts PASTEL.green("Saved")
+          puts PASTEL.green("Saved #{@file_path}")
         end
       end
     end
 
     private
 
-    def update_i18n_yml_file(i18n_changes)
+    def read_and_transform(&block)
+      adapter_class = ExtractI18n::Adapters::Adapter.for(@file_path)
+      if adapter_class
+        adapter = adapter_class.new(
+          file_key: @file_key,
+          on_ask: ->(change) { ask_one_change?(change) },
+          options: @options
+        )
+        output = adapter.run(original_content)
+        if output != original_content
+          yield(output)
+        end
+      end
+    end
+
+    def ask_one_change?(change)
+      puts change.format
+      if PROMPT.no?("replace line ?")
+        @i18n_changes[change.key] = change.i18n_string
+        true
+      else
+        false
+      end
+    end
+
+    def update_i18n_yml_file
       base = if File.exist?(@write_to)
                YAML.load_file(@write_to)
              else
                {}
              end
-      i18n_changes.each do |key, value|
+      @i18n_changes.each do |key, value|
         tree = base
         keys = key.split('.').unshift(@locale)
         keys.each_with_index do |part, i|
@@ -49,25 +79,6 @@ module ExtractI18n
 
     def original_content
       @original_content ||= File.read(file_path)
-    end
-
-    def read_and_transform(&block)
-      buffer        = Parser::Source::Buffer.new('(example)')
-      buffer.source = original_content
-      begin
-        temp = Parser::CurrentRuby.parse(original_content)
-        rewriter = ExtractI18n::Transform.new(file_key: @file_key)
-
-        # Rewrite the AST, returns a String with the new form.
-        output = rewriter.rewrite(buffer, temp)
-        if output != original_content
-          yield(output, rewriter.i18n_changes)
-        end
-      rescue StandardError => e
-        puts 'Parsing error'
-        puts e.inspect
-        nil
-      end
     end
   end
 end
