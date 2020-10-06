@@ -56,10 +56,10 @@ module ExtractI18n
     def ask_one_change?(change)
       puts change.format
       if PROMPT.no?("replace line ?")
+        false
+      else
         @i18n_changes[change.key] = change.i18n_string
         true
-      else
-        false
       end
     end
 

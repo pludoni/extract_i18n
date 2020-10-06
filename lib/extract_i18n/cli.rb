@@ -1,4 +1,5 @@
 require 'optparse'
+require 'extract_i18n'
 require 'extract_i18n/file_processor'
 require 'extract_i18n/version'
 require 'open-uri'
@@ -10,11 +11,11 @@ module ExtractI18n
       @options = {}
       ARGV << '-h' if ARGV.empty?
       OptionParser.new do |opts|
-        opts.banner = "Usage: #{__FILE__} -l <locale> -w <target-yml> [path*]"
+        opts.banner = "Usage: extract-i18n -l <locale> -w <target-yml> [path*]"
 
         opts.on('--version', 'Print version number') do
           puts ExtractI18n::VERSION
-          exit
+          exit 1
         end
 
         opts.on('-lLOCALE', '--locale=LOCALE', 'default locale for extraction (Default = en)') do |f|
@@ -35,10 +36,12 @@ module ExtractI18n
 
         opts.on('-h', '--help', 'Prints this help') do
           puts opts
-          exit
+          exit 1
         end
       end.parse!
 
+      @options[:write_to] ||= "config/locales/unsorted.#{@options[:locale]}.yml"
+      @options[:locale] ||= 'en'
       @files = ARGV
     end
 
