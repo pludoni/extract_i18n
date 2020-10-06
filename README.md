@@ -1,34 +1,46 @@
 # ExtractI18n
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/extract_i18n`. To experiment with that code, run `bin/console` for an interactive prompt.
+CLI helper program to automatically extract bare text strings into Rails I18n interactively.
 
-TODO: Delete this and the text above, and describe your gem
+Useful when adding i18n to a medium/large Rails app.
+
+This Gem **supports** the following source files:
+
+- Ruby files (controllers, models etc.) via Ruby-Parser, e.g. walking all Ruby Strings
+- Slim Views (via Regexp parser by SlimKeyfy)
+- Vue Pug views
+  - Pug is very similar to slim and thus relatively good extractable via Regexp.
+
+CURRENTLY THERE IS **NO SUPPORT** FOR:
+
+- erb
+- haml
+- vue html templates (Check out my vue pug converting script)
+
+But I am open to integrating PRs for those!
+
+I strongly recommend using a Source-Code-Management (Git) and ``i18n-tasks`` for checking the key consistency.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'extract_i18n'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+install:
 
     $ gem install extract_i18n
 
 ## Usage
 
-TODO: Write usage instructions here
+DO USE A SOURCE-CODE-MANAGEMENT-SYSTEM (Git). There is no guarantee that programm will not destroy your workspace :)
 
-## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```
+extract-i18n --helper
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+extract-i18n --locale de --yaml config/locales/unsorted.de.yml app/views/user
+```
+
+If you prefer relative keys in slim views use ``--slim-relative``, e.g. ``t('.title')`` instead of ``t('users.index.title')``.
+I prefer absolute keys, as it makes copy pasting/ moving files much safer.
+
 
 ## Contributing
 

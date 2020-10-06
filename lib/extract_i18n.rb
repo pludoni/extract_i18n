@@ -22,7 +22,10 @@ module ExtractI18n
   ]
 
   def self.key(string, length: 25)
-    string.strip.gsub(/\W+/, '_').downcase[0..length].gsub(/_+$|^_+/, '')
+    string.strip.
+      unicode_normalize(:nfkd).gsub(/(\p{Letter})\p{Mark}+/, '\\1').
+      gsub(/\W+/, '_').downcase[0..length].
+      gsub(/_+$|^_+/, '')
   end
 
   def self.file_key(path)

@@ -82,6 +82,15 @@ RSpec.describe ExtractI18n::FileProcessor do
     processor.run
 
     expect(
+      File.read(view)
+    ).to be == <<~DOC
+      <template lang="pug">
+        b-modal(:title="$t('js.user.components.edit_modal.some_title')")
+          | {{ $t('js.user.components.edit_modal.content_here_and_more_here') }}
+      </template>
+    DOC
+
+    expect(
       File.read(yml)
     ).to be == <<~DOC
       ---
@@ -90,17 +99,8 @@ RSpec.describe ExtractI18n::FileProcessor do
           user:
             components:
               edit_modal:
-                title: Some Title
-                content_here: Content here and more here
-    DOC
-
-    expect(
-      File.read(view)
-    ).to be == <<~DOC
-      <template lang="pug">
-        b-modal(:title="$t('js.user.components.edit_modal.title')")
-          | {{ $t('js.user.components.edit_modal.content_here') }}
-      </template>
+                some_title: Some Title
+                content_here_and_more_here: Content here and more here
     DOC
   end
 

@@ -29,7 +29,7 @@ module ExtractI18n
           @options[:relative] = f
         end
 
-        opts.on('-wYAML', '--write=YAML-FILE', 'Write extracted keys to YAML file (default = config/locales/unsorted.LOCALE.yml)') do |f|
+        opts.on('-yYAML', '--yaml=YAML-FILE', 'Write extracted keys to YAML file (default = config/locales/unsorted.LOCALE.yml)') do |f|
           @options[:write_to] = f || "config/locales/unsorted.#{@options[:locale]}"
         end
 

@@ -19,13 +19,16 @@ module ExtractI18n
     #   what piece of source_line to replace
     # @param t_template [String]
     #   how to format the replacement translation, use 2 placeholder %s for the string and for the optional arguments
-    def initialize(i18n_key:, i18n_string:, interpolate_arguments:, source_line:, remove:, t_template: %{I18n.t("%s"%s)})
+    # @param interpolation_type [Symbol]
+    #   :ruby or :vue
+    def initialize(i18n_key:, i18n_string:, interpolate_arguments:, source_line:, remove:, t_template: %{I18n.t("%s"%s)}, interpolation_type: :ruby)
       @i18n_string = i18n_string
       @key = i18n_key
       @interpolate_arguments = interpolate_arguments
       @source_line = source_line
       @remove = remove
       @t_template = t_template
+      @interpolation_type = interpolation_type
     end
 
     def format
@@ -54,10 +57,21 @@ module ExtractI18n
     end
 
     def i18n_arguments_string
-      if @interpolate_arguments.keys.length > 0
-        ", " + @interpolate_arguments.map { |k, v| "#{k}: (#{v})" }.join(', ')
+      case @interpolation_type
+      when :ruby
+        if @interpolate_arguments.keys.length > 0
+          ", " + @interpolate_arguments.map { |k, v| "#{k}: (#{v})" }.join(', ')
+        else
+          ""
+        end
+      when :vue
+        if @interpolate_arguments.keys.length > 0
+          ", { " + @interpolate_arguments.map { |k, v| "#{k}: (#{v.strip})" }.join(', ') + " }"
+        else
+          ""
+        end
       else
-        ""
+        raise NotImplementedError, @interpolation_type
       end
     end
   end

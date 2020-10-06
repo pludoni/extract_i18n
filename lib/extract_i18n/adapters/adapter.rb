@@ -4,6 +4,7 @@ module ExtractI18n::Adapters
       case file_path
       when /\.rb$/ then RubyAdapter
       when /\.slim$/ then SlimAdapter
+      when /\.vue$/ then VueAdapter
       end
     end
 

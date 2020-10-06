@@ -103,10 +103,4 @@ RSpec.describe ExtractI18n::Adapters::SlimAdapter do
       ]
     )
   end
-
-  def cmp!(hash)
-    hash.each do |string, (result, translations)|
-      expect(run(string)).to be == [result, translations]
-    end
-  end
 end

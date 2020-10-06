@@ -26,6 +26,12 @@ module AdapterHelpers
     output = adapter.run(string)
     [output, i18n_changes]
   end
+
+  def cmp!(hash)
+    hash.each do |string, (result, translations)|
+      expect(run(string)).to be == [result, translations]
+    end
+  end
 end
 
 RSpec.configure do |config|

@@ -50,7 +50,7 @@ module ExtractI18n
     private
 
     def parse_html(&block)
-      return nil if @word.line.match(TRANSLATED)
+      return @word.line if @word.line.match(TRANSLATED)
 
       tagged_with_equals = Slimkeyfy::Whitespacer.convert_slim(@word.head)
       body = @word.tail.join(" ")
