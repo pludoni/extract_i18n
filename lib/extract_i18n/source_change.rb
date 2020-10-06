@@ -56,6 +56,17 @@ module ExtractI18n
       sprintf(@t_template, i18n_key, i18n_arguments_string)
     end
 
+    def increment_key!
+      if @key[-1][/(.*)([0-9]+)$/]
+        rest = $1
+        number = $2.to_i
+      else
+        number = 1
+        rest = @key
+      end
+      @key = "#{rest}#{number + 1}"
+    end
+
     def i18n_arguments_string
       case @interpolation_type
       when :ruby

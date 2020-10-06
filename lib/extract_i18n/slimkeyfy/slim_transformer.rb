@@ -72,10 +72,11 @@ module ExtractI18n
       yield(change)
     end
 
-    def parse_html_arguments(line, &block)
+    def parse_html_arguments(line, token_skipped_before = nil, &block)
       final_line = line
       regex_list.each do |regex|
         line.scan(regex) do |m_data|
+          next if m_data == token_skipped_before
           before = m_data[0]
           html_tag = m_data[1]
           translation = match_string(m_data[2])

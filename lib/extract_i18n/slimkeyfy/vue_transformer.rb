@@ -38,10 +38,11 @@ class ExtractI18n::Slimkeyfy::VueTransformer < ExtractI18n::Slimkeyfy::SlimTrans
     yield(change)
   end
 
-  def parse_html_arguments(line, &block)
+  def parse_html_arguments(line, token_skipped_before = nil, &block)
     final_line = line
     regex_list.each do |regex|
       line.scan(regex) do |m_data|
+        next if m_data == token_skipped_before
         before = m_data[0]
         if before[-1] == ":" # already dynamic attribute
           next
@@ -61,7 +62,7 @@ class ExtractI18n::Slimkeyfy::VueTransformer < ExtractI18n::Slimkeyfy::SlimTrans
           t_template: "#{before}:#{html_tag}\"$t('%s'%s)\"#{after}"
         )
         final_line = yield(change)
-        return parse_html_arguments(final_line, &block)
+        return parse_html_arguments(final_line, m_data, &block)
       end
     end
     @word.indentation + final_line

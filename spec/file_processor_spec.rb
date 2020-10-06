@@ -14,7 +14,7 @@ RSpec.describe ExtractI18n::FileProcessor do
   let(:yml) { 'locales.en.yml' }
   before(:each) do
     allow_any_instance_of(TTY::Prompt).to receive(:yes?).and_return(true)
-    allow_any_instance_of(TTY::Prompt).to receive(:no?).and_return(true)
+    allow_any_instance_of(TTY::Prompt).to receive(:no?).and_return(false)
     allow_any_instance_of(ExtractI18n::FileProcessor).to receive(:puts)
   end
 
@@ -104,6 +104,39 @@ RSpec.describe ExtractI18n::FileProcessor do
     DOC
   end
 
+  specify 'endless loop' do
+    # Nutzer sagt nein
+    allow_any_instance_of(TTY::Prompt).to receive(:no?).and_return(true)
+
+    view = 'app/javascript/user/components/EditModal.vue'
+    create_file_with_layout(
+      view => <<~VIEW
+        <template lang="pug">
+          b-modal(title="Some Title")
+            | Content here
+            | and more here
+        </template>
+      VIEW
+    )
+    processor = ExtractI18n::FileProcessor.new(file_path: view, write_to: yml, locale: 'en', options: { namespace: 'js' })
+    processor.run
+
+    expect(File.read(yml)).to be == "--- {}\n"
+  end
+
+  specify 'key clash' do
+    view = 'app/views/users/index.html.slim'
+    create_file_with_layout(
+      view => "div Hello World is a very long string that bla\n" +
+              "div Hello World is a very long string that also bla\n"
+    )
+    processor = ExtractI18n::FileProcessor.new(file_path: view, write_to: yml, locale: 'en', options: { relative: true })
+    processor.run
+
+    expect(
+      YAML.load_file(yml).dig('en', 'users', 'index').length
+    ).to be == 2
+  end
 
   def create_file_with_layout(hash)
     hash.each do |k, v|

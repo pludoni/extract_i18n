@@ -3,6 +3,7 @@
 require 'parser/current'
 require 'tty/prompt'
 require 'diffy'
+require 'yaml'
 
 module ExtractI18n
   class FileProcessor
@@ -54,12 +55,20 @@ module ExtractI18n
     end
 
     def ask_one_change?(change)
+      check_for_unique!(change)
       puts change.format
       if PROMPT.no?("replace line ?")
         false
       else
         @i18n_changes[change.key] = change.i18n_string
         true
+      end
+    end
+
+    def check_for_unique!(change)
+      if @i18n_changes[change.key] && @i18n_changes[change.key] != change.i18n_string
+        change.increment_key!
+        check_for_unique!(change)
       end
     end
 
