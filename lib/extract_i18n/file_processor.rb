@@ -7,6 +7,7 @@ require 'diffy'
 module ExtractI18n
   class FileProcessor
     PROMPT = TTY::Prompt.new
+    PASTEL = Pastel.new
 
     def initialize(file_path:, write_to:, locale:, options: {})
       @file_path = file_path
@@ -24,7 +25,7 @@ module ExtractI18n
         puts Diffy::Diff.new(original_content, result, context: 1).to_s(:color)
         if PROMPT.yes?("Save changes?")
           File.write(@file_path, result)
-          update_i18n_yml_file(i18n_changes)
+          update_i18n_yml_file
           puts PASTEL.green("Saved #{@file_path}")
         end
       end
@@ -33,20 +34,17 @@ module ExtractI18n
     private
 
     def read_and_transform(&block)
-      if @options[:namespace]
-        key = "#{@options[:namespace]}.#{@file_key}"
-      else
-        key = @file_key
-      end
+      key = if @options[:namespace]
+              "#{@options[:namespace]}.#{@file_key}"
+            else
+              @file_key
+            end
       adapter_class = ExtractI18n::Adapters::Adapter.for(@file_path)
-      if @options[:relative] && adapter_class.supports_relative_keys?
-        key = ""
-      end
       if adapter_class
         adapter = adapter_class.new(
           file_key: key,
           on_ask: ->(change) { ask_one_change?(change) },
-          options: @options
+          options: @options,
         )
         output = adapter.run(original_content)
         if output != original_content
@@ -86,7 +84,7 @@ module ExtractI18n
     end
 
     def original_content
-      @original_content ||= File.read(file_path)
+      @original_content ||= File.read(@file_path)
     end
   end
 end

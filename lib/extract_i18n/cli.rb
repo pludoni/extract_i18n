@@ -25,6 +25,10 @@ module ExtractI18n
           @options[:base_key] = f
         end
 
+        opts.on('-r', '--slim-relative', 'When activated, will use relative keys like t(".title")') do |f|
+          @options[:relative] = f
+        end
+
         opts.on('-wYAML', '--write=YAML-FILE', 'Write extracted keys to YAML file (default = config/locales/unsorted.LOCALE.yml)') do |f|
           @options[:write_to] = f || "config/locales/unsorted.#{@options[:locale]}"
         end

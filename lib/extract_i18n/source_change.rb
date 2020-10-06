@@ -32,14 +32,25 @@ module ExtractI18n
       s = ""
       s += PASTEL.cyan("replace:  ") + PASTEL.blue(@source_line).
         gsub(@remove, PASTEL.red(@remove))
+      unless @source_line.include?("\n")
+        s += "\n"
+      end
       s += PASTEL.cyan("with:     ") + PASTEL.blue(@source_line).
         gsub(@remove, PASTEL.green(i18n_t))
+      unless @source_line.include?("\n")
+        s += "\n"
+      end
       s += PASTEL.cyan("add i18n: ") + PASTEL.blue("#{@key}: #{@i18n_string}")
       s
     end
 
-    def i18n_t
-      sprintf(@t_template, key, i18n_arguments_string)
+    def i18n_t(relative: false)
+      i18n_key = if relative
+                   "." + key.split('.').last
+                 else
+                   key
+                 end
+      sprintf(@t_template, i18n_key, i18n_arguments_string)
     end
 
     def i18n_arguments_string

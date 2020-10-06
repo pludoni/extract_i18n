@@ -3,6 +3,7 @@ module ExtractI18n::Adapters
     def self.for(file_path)
       case file_path
       when /\.rb$/ then RubyAdapter
+      when /\.slim$/ then SlimAdapter
       end
     end
 
@@ -16,6 +17,10 @@ module ExtractI18n::Adapters
 
     def run(content)
       raise NotImplementedError
+    end
+
+    def self.supports_relative_keys?
+      false
     end
 
     private

@@ -1,5 +1,9 @@
 module ExtractI18n::Adapters
   class SlimAdapter < Adapter
+    def self.supports_relative_keys?
+      true
+    end
+
     def run(original_content)
       @content = self.class.join_multiline(original_content.split("\n"))
       @content << "" # new line at the end
@@ -20,7 +24,7 @@ module ExtractI18n::Adapters
         end
 
         if @on_ask.call(change)
-          change.i18n_t
+          change.i18n_t(relative: @options[:relative])
         else
           old_line
         end

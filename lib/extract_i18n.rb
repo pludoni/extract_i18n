@@ -11,7 +11,7 @@ module ExtractI18n
     attr_accessor :strip_path, :ignore_hash_keys, :ignore_functions, :ignorelist
   end
 
-  self.strip_path = %r{^app/(javascript|controllers|views)|^lib|^src}
+  self.strip_path = %r{^app/(javascript|controllers|views)|^lib|^src|^app}
 
   # ignore for .rb files: ignore those file types
   self.ignore_hash_keys = %w[class_name foreign_key join_table association_foreign_key key]
