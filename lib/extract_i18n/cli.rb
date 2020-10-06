@@ -21,6 +21,10 @@ module ExtractI18n
           @options[:locale] = f || 'en'
         end
 
+        opts.on('-nNAMESPACE', '--namespace=NAMESPACE', 'Locale base key to wrap locations in') do |f|
+          @options[:base_key] = f
+        end
+
         opts.on('-wYAML', '--write=YAML-FILE', 'Write extracted keys to YAML file (default = config/locales/unsorted.LOCALE.yml)') do |f|
           @options[:write_to] = f || "config/locales/unsorted.#{@options[:locale]}"
         end
@@ -50,11 +54,11 @@ module ExtractI18n
 
     def process_file(file_path)
       puts "Processing: #{file_path}"
-      ExtractI18n::Processor.new(
+      ExtractI18n::FileProcessor.new(
         file_path: file_path,
         write_to: @options[:write_to],
         locale: @options[:locale],
-        options: @options,
+        options: @options
       ).run
     end
   end

@@ -7,11 +7,11 @@ require 'diffy'
 module ExtractI18n
   class FileProcessor
     PROMPT = TTY::Prompt.new
-    STRIP_PATH = %r{^app/|\.rb|^lib/$}.freeze
 
     def initialize(file_path:, write_to:, locale:, options: {})
       @file_path = file_path
-      @file_key = @file_path.gsub(STRIP_PATH, '').gsub('/', '.')
+      @file_key = ExtractI18n.file_key(@file_path)
+
       @locale = locale
       @write_to = write_to
       @options = options
@@ -33,10 +33,18 @@ module ExtractI18n
     private
 
     def read_and_transform(&block)
+      if @options[:namespace]
+        key = "#{@options[:namespace]}.#{@file_key}"
+      else
+        key = @file_key
+      end
       adapter_class = ExtractI18n::Adapters::Adapter.for(@file_path)
+      if @options[:relative] && adapter_class.supports_relative_keys?
+        key = ""
+      end
       if adapter_class
         adapter = adapter_class.new(
-          file_key: @file_key,
+          file_key: key,
           on_ask: ->(change) { ask_one_change?(change) },
           options: @options
         )

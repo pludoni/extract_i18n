@@ -20,10 +20,6 @@ module ExtractI18n::Adapters
 
     private
 
-    def to_key(string, length: 25)
-      string.strip.gsub(/\W+/, '_').downcase[0..length].sub(/_$|^_/, '')
-    end
-
     def original_content
       @original_content ||= File.read(file_path)
     end

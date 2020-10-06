@@ -14,6 +14,20 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'extract_i18n'
+require 'pry'
+
+module AdapterHelpers
+  def run(string, file_key: 'models.foo')
+    i18n_changes = {}
+    adapter = described_class.new(
+      file_key: file_key,
+      on_ask: ->(change) { (i18n_changes[change.key] = change.i18n_string) && true }
+    )
+    output = adapter.run(string)
+    [output, i18n_changes]
+  end
+end
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -99,4 +113,6 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+
+  config.include AdapterHelpers, file_path: /spec\/adapters/
 end

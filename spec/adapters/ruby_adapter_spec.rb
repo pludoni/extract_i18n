@@ -66,14 +66,4 @@ RSpec.describe ExtractI18n::Adapters::RubyAdapter do
       file, {}
     ]
   end
-
-  def run(string, file_key = 'models.foo')
-    i18n_changes = {}
-    adapter = ExtractI18n::Adapters::RubyAdapter.new(
-      file_key: file_key,
-      on_ask: ->(change) { i18n_changes[change.key] = change.i18n_string; true }
-    )
-    output = adapter.run(string)
-    [output, i18n_changes]
-  end
 end
