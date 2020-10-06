@@ -13,13 +13,14 @@ This Gem **supports** the following source files:
 
 CURRENTLY THERE IS **NO SUPPORT** FOR:
 
-- erb
-- haml
-- vue html templates (Check out my vue pug converting script)
+- erb ( integrating/forking https://github.com/zigzag/ready_for_i18n or https://github.com/ProGM/i18n-html_extractor)
+- haml ( integrating https://github.com/shaiguitar/haml-i18n-extractor)
+- vue html templates ([Check out my vue pug converting script](https://gist.github.com/zealot128/6c41df1d33a810856a557971a04989f6))
 
 But I am open to integrating PRs for those!
 
 I strongly recommend using a Source-Code-Management (Git) and ``i18n-tasks`` for checking the key consistency.
+I've created a scanner to make that work with vue $t structures too: https://gist.github.com/zealot128/e6ec1767a40a6c3d85d7f171f4d88293
 
 ## Installation
 
