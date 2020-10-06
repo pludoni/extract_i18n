@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# rubocop:disable Layout/LineLength
+
 require 'optparse'
 require 'extract_i18n'
 require 'extract_i18n/file_processor'

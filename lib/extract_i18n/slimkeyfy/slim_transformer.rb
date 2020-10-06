@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExtractI18n
   class Slimkeyfy::SlimTransformer
     TRANSLATED = /t\s*\(?\s*(".*?"|'.*?')\s*\)?/.freeze
@@ -49,7 +51,7 @@ module ExtractI18n
 
     private
 
-    def parse_html(&block)
+    def parse_html(&_block)
       return @word.line if @word.line.match(TRANSLATED)
 
       tagged_with_equals = Slimkeyfy::Whitespacer.convert_slim(@word.head)

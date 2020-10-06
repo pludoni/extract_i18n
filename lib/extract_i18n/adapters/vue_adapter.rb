@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExtractI18n::Adapters
   class VueAdapter < SlimAdapter
     def process_line(old_line)

@@ -34,7 +34,7 @@ module ExtractI18n
 
     private
 
-    def read_and_transform(&block)
+    def read_and_transform(&_block)
       key = if @options[:namespace]
               "#{@options[:namespace]}.#{@file_key}"
             else

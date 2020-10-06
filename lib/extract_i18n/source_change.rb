@@ -1,4 +1,5 @@
-# rubocop:disable Metrics/ParameterLists
+# frozen_string_literal: true
+
 require 'pastel'
 
 module ExtractI18n
@@ -21,7 +22,15 @@ module ExtractI18n
     #   how to format the replacement translation, use 2 placeholder %s for the string and for the optional arguments
     # @param interpolation_type [Symbol]
     #   :ruby or :vue
-    def initialize(i18n_key:, i18n_string:, interpolate_arguments:, source_line:, remove:, t_template: %{I18n.t("%s"%s)}, interpolation_type: :ruby)
+    def initialize(
+      i18n_key:,
+      i18n_string:,
+      interpolate_arguments:,
+      source_line:,
+      remove:,
+      t_template: %{I18n.t("%s"%s)},
+      interpolation_type: :ruby
+    )
       @i18n_string = i18n_string
       @key = i18n_key
       @interpolate_arguments = interpolate_arguments
@@ -34,12 +43,12 @@ module ExtractI18n
     def format
       s = ""
       s += PASTEL.cyan("replace:  ") + PASTEL.blue(@source_line).
-        gsub(@remove, PASTEL.red(@remove))
+           gsub(@remove, PASTEL.red(@remove))
       unless @source_line.include?("\n")
         s += "\n"
       end
       s += PASTEL.cyan("with:     ") + PASTEL.blue(@source_line).
-        gsub(@remove, PASTEL.green(i18n_t))
+           gsub(@remove, PASTEL.green(i18n_t))
       unless @source_line.include?("\n")
         s += "\n"
       end

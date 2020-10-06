@@ -1,5 +1,3 @@
-# rubocop:disable Lint/InterpolationCheck
-
 RSpec.describe ExtractI18n::Adapters::VueAdapter do
   specify "block content" do
     view = template("div.foo\n  | Content\n")

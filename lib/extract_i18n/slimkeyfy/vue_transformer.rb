@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ExtractI18n::Slimkeyfy::VueTransformer < ExtractI18n::Slimkeyfy::SlimTransformer
   BEFORE = /(?<before>.*[\( ^])/.freeze
   HTML_ARGUMENTS = {
@@ -15,7 +17,7 @@ class ExtractI18n::Slimkeyfy::VueTransformer < ExtractI18n::Slimkeyfy::SlimTrans
     HTML_ARGUMENTS.map { |_, regex| /#{BEFORE}#{regex}#{TRANSLATION}#{AFTER}/ }
   end
 
-  def parse_html(&block)
+  def parse_html(&_block)
     return @word.line if @word.line.match(TRANSLATED)
     return @word.line if @word.tail.join(" ")[/^{{.*}}$/]
 

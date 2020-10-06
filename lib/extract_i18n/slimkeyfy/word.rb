@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExtractI18n::Slimkeyfy
   class Word
     attr_reader :line, :tokens, :indentation
@@ -20,9 +22,9 @@ module ExtractI18n::Slimkeyfy
       has_html_form = !!@line[/^ *[\.#]?[a-z\.#-]+\(/]
       delimiter_items =
         @line.
-          sub(/^(\s*\|)(\w)/, "\\1 \\2"). # add a whitespace to support "|string"
-          split(has_html_form ? /(?<=[\(])| +/ : ' '). # split by whitespace or ( but keep (
-          drop_while { |i| i == "" } # .. but that leaves leading ""
+        sub(/^(\s*\|)(\w)/, "\\1 \\2"). # add a whitespace to support "|string"
+        split(has_html_form ? /(?<=[\(])| +/ : ' '). # split by whitespace or ( but keep (
+        drop_while { |i| i == "" } # .. but that leaves leading ""
       items = []
       # div: div
       delimiter_items.reverse_each do |item|

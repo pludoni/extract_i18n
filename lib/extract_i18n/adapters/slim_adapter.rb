@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExtractI18n::Adapters
   class SlimAdapter < Adapter
     def self.supports_relative_keys?

@@ -1,23 +1,25 @@
+# frozen_string_literal: true
+
 module ExtractI18n
   class Slimkeyfy::Whitespacer
     HTML = /([a-z\.]+[0-9\-]*)+/.freeze
     HTML_TAGS = /^(?<html_tag>'|\||#{HTML})/.freeze
 
-    def self.convert_slim(s)
-      m = s.match(HTML_TAGS)
+    def self.convert_slim(string)
+      m = string.match(HTML_TAGS)
 
-      return s if m.nil? or m[:html_tag].nil?
-      return s if has_equals_tag?(s, m[:html_tag])
+      return string if m.nil? or m[:html_tag].nil?
+      return string if has_equals_tag?(string, m[:html_tag])
       tag = m[:html_tag]
 
       case tag
       when /\|/
-        s.gsub("|", "=")
+        string.gsub("|", "=")
       when /\'/
-        s.gsub("'", "=>")
+        string.gsub("'", "=>")
       when HTML
-        s.gsub(s, "#{s} =")
-      else s end
+        string.gsub(string, "#{string} =")
+      else string end
     end
 
     def self.convert_nbsp(body, tag)
@@ -37,8 +39,8 @@ module ExtractI18n
       return ">" if body.end_with?("&nbsp;")
     end
 
-    def self.has_equals_tag?(s, html_tag)
-      s.gsub(html_tag, "").strip.start_with?("=")
+    def self.has_equals_tag?(string, html_tag)
+      string.gsub(html_tag, "").strip.start_with?("=")
     end
   end
 end

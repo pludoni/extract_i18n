@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop:disable Lint/InterpolationCheck
 RSpec.describe ExtractI18n::FileProcessor do
   around(:each) do |ex|

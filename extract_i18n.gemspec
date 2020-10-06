@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Stefan Wienert"]
   spec.email         = ["info@stefanwienert.de"]
 
-  spec.summary       = %q{Extact i18n from RUBY Files using Ruby parser}
-  spec.description   = %q{Extact i18n from RUBY Files using Ruby parser}
+  spec.summary       = %q{Extact i18n from Ruby files using Ruby parser and slim files using regex}
+  spec.description   = %q{Extact i18n from Ruby files using Ruby parser and slim files using regex interactively}
   spec.homepage      = "https://github.com/pludoni/extract_i18n"
   spec.license       = "MIT"
 
@@ -27,8 +27,8 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'parser', '>= 2.6'
   spec.add_runtime_dependency 'slim'
-  spec.add_runtime_dependency 'zeitwerk'
   spec.add_runtime_dependency 'tty-prompt'
+  spec.add_runtime_dependency 'zeitwerk'
   spec.add_dependency "diff-lcs"
   spec.add_dependency "diffy"
 end

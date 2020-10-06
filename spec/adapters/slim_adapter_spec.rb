@@ -6,7 +6,8 @@ RSpec.describe ExtractI18n::Adapters::SlimAdapter do
       "div.foobar\n  p Hello World" => [
         "div.foobar\n  p = t('models.foo.hello_world')\n",
         { "models.foo.hello_world" => "Hello World" }
-      ])
+      ]
+    )
   end
 
   specify 'pipe' do

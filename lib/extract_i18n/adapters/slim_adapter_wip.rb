@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'slim'
 
 module ExtractI18n::Adapters
@@ -106,7 +108,6 @@ module ExtractI18n::Adapters
 
       #   binding.pry
       #   result = super
-
 
       #   change = ExtractI18n::SourceChange.new(
       #     i18n_key: "#{@file_key}.#{i18n_key}",

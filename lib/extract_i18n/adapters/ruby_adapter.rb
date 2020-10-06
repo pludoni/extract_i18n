@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parser/current'
 require 'tty-prompt'
 require 'pry'
@@ -58,7 +60,9 @@ module ExtractI18n::Adapters
 
       i18n_key = ExtractI18n.key(node.children.select { |i| i.type == :str }.map { |i| i.children[0] }.join(' '))
 
-      ask_and_continue(i18n_key: i18n_key, i18n_string: out_string, interpolate_arguments: interpolate_arguments, node: node)
+      ask_and_continue(
+        i18n_key: i18n_key, i18n_string: out_string, interpolate_arguments: interpolate_arguments, node: node,
+      )
     end
 
     def on_str(node)
