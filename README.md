@@ -9,13 +9,14 @@ Useful when adding i18n to a medium/large Rails app.
 This Gem **supports** the following source files:
 
 - Ruby files (controllers, models etc.) via Ruby-Parser, e.g. walking all Ruby Strings
-- Slim Views (via Regexp parser by SlimKeyfy)
+- Slim Views (via Regexp parser by [SlimKeyfy](https://github.com/phrase/slimkeyfy) (MIT License))
 - Vue Pug views
   - Pug is very similar to slim and thus relatively good extractable via Regexp.
+- ERB views
+  - by vendoring/extending https://github.com/ProGM/i18n-html_extractor (MIT License)
 
 CURRENTLY THERE IS **NO SUPPORT** FOR:
 
-- erb ( integrating/forking https://github.com/zigzag/ready_for_i18n or https://github.com/ProGM/i18n-html_extractor)
 - haml ( integrating https://github.com/shaiguitar/haml-i18n-extractor)
 - vue html templates ([Check out my vue pug converting script](https://gist.github.com/zealot128/6c41df1d33a810856a557971a04989f6))
 
