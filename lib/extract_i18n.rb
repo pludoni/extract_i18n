@@ -4,11 +4,14 @@ require "extract_i18n/version"
 
 require "zeitwerk"
 loader = Zeitwerk::Loader.for_gem
+loader.inflector.inflect(
+  "html_extractor"   => "HTMLExtractor",
+)
 loader.setup # ready!
 
 module ExtractI18n
   class << self
-    attr_accessor :strip_path, :ignore_hash_keys, :ignore_functions, :ignorelist
+    attr_accessor :strip_path, :ignore_hash_keys, :ignore_functions, :ignorelist, :html_fields_with_plaintext
   end
 
   self.strip_path = %r{^app/(javascript|controllers|views)|^lib|^src|^app}
@@ -20,6 +23,7 @@ module ExtractI18n
     '_',
     '::'
   ]
+  self.html_fields_with_plaintext = %w[title placeholder alt label aria-label modal-title]
 
   def self.key(string, length: 25)
     string.strip.
