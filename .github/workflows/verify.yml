@@ -20,4 +20,10 @@ jobs:
           bundle install --jobs 4 --retry 3
       - name: Run tests
         run: bundle exec rspec
+      - name: Build and publish gem
+        uses: jstastny/publish-gem-to-github@master
+        with:
+          continue-on-error: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: pludoni
 
