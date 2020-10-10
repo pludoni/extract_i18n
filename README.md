@@ -2,6 +2,8 @@
 
 [![Gem Version](https://badge.fury.io/rb/extract_i18n.svg)](https://badge.fury.io/rb/extract_i18n)
 
+[Read my blog post if you'd like more about the development of ExtractI18n](https://www.stefanwienert.de/blog/2020/07/26/internationalize-medium-rails-app-with-tooling/).
+
 CLI helper program to automatically extract bare text strings into Rails I18n interactively.
 
 Useful when adding i18n to a medium/large Rails app.
