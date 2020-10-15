@@ -85,7 +85,7 @@ module ExtractI18n
           after = m_data[3]
           interpolate_arguments, translation = extract_arguments(translation)
           change = ExtractI18n::SourceChange.new(
-            source_line: final_line,
+            source_line: @word.indentation + final_line,
             i18n_string: translation,
             i18n_key: "#{@file_key}.#{ExtractI18n.key(translation)}",
             remove: m_data[2],
@@ -96,7 +96,11 @@ module ExtractI18n
           return parse_html_arguments(final_line, &block)
         end
       end
-      final_line
+      if final_line == line
+        @word.indentation + final_line
+      else
+        final_line
+      end
     end
 
     def link_tos(line)

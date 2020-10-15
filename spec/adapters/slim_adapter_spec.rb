@@ -104,4 +104,20 @@ RSpec.describe ExtractI18n::Adapters::SlimAdapter do
       ]
     )
   end
+
+  specify 'Bugfix: nested image_tag loses indention' do
+    from = <<~DOC
+      .kanaleo-integration(style='margin-top: 50px;margin-bottom: 30px;')
+        .panel
+          .panel-heading
+            = image_tag "kanaleo_small.png"
+    DOC
+    to = <<~DOC
+      .kanaleo-integration(style='margin-top: 50px;margin-bottom: 30px;')
+        .panel
+          .panel-heading
+            = image_tag "kanaleo_small.png"
+    DOC
+    cmp!(from => [to, {}])
+  end
 end

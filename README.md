@@ -39,7 +39,7 @@ DO USE A SOURCE-CODE-MANAGEMENT-SYSTEM (Git). There is no guarantee that program
 
 
 ```
-extract-i18n --helper
+extract-i18n --help
 
 extract-i18n --locale de --yaml config/locales/unsorted.de.yml app/views/user
 ```
