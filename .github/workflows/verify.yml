@@ -22,8 +22,8 @@ jobs:
         run: bundle exec rspec
       - name: Build and publish gem
         uses: jstastny/publish-gem-to-github@master
+        continue-on-error: true
         with:
-          continue-on-error: true
           token: ${{ secrets.GITHUB_TOKEN }}
           owner: pludoni
 
