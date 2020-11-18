@@ -37,6 +37,7 @@ module ExtractI18n
       gsub(%r{^/|/$}, '').
       gsub(/\.(vue|rb|html\.slim|\.slim)$/, '').
       gsub(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2').gsub(/([a-z\d])([A-Z])/, '\1_\2').
+      gsub('/_', '.').
       gsub('/', '.').
       tr("-", "_").downcase
   end

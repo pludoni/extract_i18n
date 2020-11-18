@@ -69,6 +69,31 @@ RSpec.describe ExtractI18n::FileProcessor do
     DOC
   end
 
+  specify 'Partial' do
+    view = 'app/views/users/_foo.html.slim'
+    create_file_with_layout(
+      view => 'div Hello World' + "\n"
+    )
+    processor = ExtractI18n::FileProcessor.new(file_path: view, write_to: yml, locale: 'en', options: { relative: true })
+    processor.run
+
+    expect(
+      File.read(yml)
+    ).to be == <<~DOC
+      ---
+      en:
+        users:
+          foo:
+            hello_world: Hello World
+    DOC
+
+    expect(
+      File.read(view)
+    ).to be == <<~DOC
+      div = t('.hello_world')
+    DOC
+  end
+
   specify 'vue with namespace' do
     view = 'app/javascript/user/components/EditModal.vue'
     create_file_with_layout(

@@ -27,7 +27,7 @@ module ExtractI18n
         end
 
         opts.on('-nNAMESPACE', '--namespace=NAMESPACE', 'Locale base key to wrap locations in') do |f|
-          @options[:base_key] = f
+          @options[:namespace] = f
         end
 
         opts.on('-r', '--slim-relative', 'When activated, will use relative keys like t(".title")') do |f|

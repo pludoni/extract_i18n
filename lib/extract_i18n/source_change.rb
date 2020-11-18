@@ -47,8 +47,12 @@ module ExtractI18n
       unless @source_line.include?("\n")
         s += "\n"
       end
-      s += PASTEL.cyan("with:     ") + PASTEL.blue(@source_line).
-           gsub(@remove, PASTEL.green(i18n_t))
+      if @source_line[@remove]
+        s += PASTEL.cyan("with:     ") + PASTEL.blue(@source_line).
+          gsub(@remove, PASTEL.green(i18n_t))
+      else
+        s += PASTEL.cyan("with:     ") + PASTEL.green(i18n_t)
+      end
       unless @source_line.include?("\n")
         s += "\n"
       end
