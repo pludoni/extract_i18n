@@ -70,7 +70,7 @@ module ExtractI18n
     end
 
     def increment_key!
-      if @key[-1][/(.*)([0-9]+)$/]
+      if @key[/(.+)([0-9]+)$/]
         rest = $1
         number = $2.to_i
       else

@@ -21,7 +21,8 @@ module ExtractI18n
   self.ignore_functions = %w[where order group select sql]
   self.ignorelist = [
     '_',
-    '::'
+    '::',
+    %r{^/}
   ]
   self.html_fields_with_plaintext = %w[title placeholder alt label aria-label modal-title]
 
