@@ -120,4 +120,19 @@ RSpec.describe ExtractI18n::Adapters::SlimAdapter do
     DOC
     cmp!(from => [to, {}])
   end
+
+  specify "Endless Loop" do
+    view =
+      <<~TPL
+        button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+          span class="sr-only" Weitere Optionen
+      TPL
+
+    adapter = described_class.new(
+      file_key: 'foo',
+      on_ask: ->(change) { p change; false }
+    )
+    output = adapter.run(view)
+    expect(output).to be == view
+  end
 end

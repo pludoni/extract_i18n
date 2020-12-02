@@ -23,8 +23,8 @@ module ExtractI18n
       append: /(?<html_tag>append:\s*)/,
       label: /(?<html_tag>[a-z]*_?label:\s*)/,
       optionals: /(?<html_tag>(default|include_blank|alt):\s*)/,
-      input: /(?<html_tag>[a-z]*\.?input:?\s*)/,
-      button: /(?<html_tag>[a-z]*\.?button:?\s*(\:[a-z]+\s*,\s*)?)/,
+      input: /(?<html_tag>[a-z]*\.?input:\s*)/,
+      button: /(?<html_tag>[a-z]*\.?button:\s*(\:[a-z]+\s*,\s*)?)/,
       tag: /(?<html_tag>(submit|content)_tag[\:\(]?\s*)/,
       data_naive: /(?<html_tag>data:\s*\{\s*(confirm|content):\s*)/
     }.freeze
