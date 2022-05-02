@@ -105,7 +105,7 @@ module ExtractI18n::Adapters
     def process_change(node)
       _, ws_before, content, ws_after = node.to_s.match(/(\s*)(.*?)(\s*)$/m).to_a
 
-      return if content.include?("{{")
+      return if content[/^\{\{/]
 
       interpolate_arguments, content = extract_arguments(content)
 
