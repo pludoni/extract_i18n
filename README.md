@@ -12,15 +12,17 @@ This Gem **supports** the following source files:
 
 - Ruby files (controllers, models etc.) via Ruby-Parser, e.g. walking all Ruby Strings
 - Slim Views (via Regexp parser by [SlimKeyfy](https://github.com/phrase/slimkeyfy) (MIT License))
+- Vue templates
+  - will scan all texts and common string-attributes such as title, alt etc. for static strings and replace with vue-i18n's $t
+  - Caveats: because of limitations of the HTML/XML parser it will slightly transform the HTML, for example, self closing tags are expanded (e.g. ``<Component />`` will become ``<Component></Component>``). Also multi-line arrangements of attributes, tags etc. might produce unexpected results, so make sure to use Git and diff the result.
 - Vue Pug views
-  - Pug is very similar to slim and thus relatively good extractable via Regexp.
+  - Pug is very similar to slim and thus relatively well extractable via Regexp.
 - ERB views
   - by vendoring/extending https://github.com/ProGM/i18n-html_extractor (MIT License)
 
 CURRENTLY THERE IS **NO SUPPORT** FOR:
 
 - haml ( integrating https://github.com/shaiguitar/haml-i18n-extractor)
-- vue html templates ([Check out my vue pug converting script](https://gist.github.com/zealot128/6c41df1d33a810856a557971a04989f6))
 
 But I am open to integrating PRs for those!
 

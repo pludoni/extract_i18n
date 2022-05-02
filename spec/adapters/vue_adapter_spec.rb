@@ -1,89 +1,80 @@
+# rubocop:disable Layout/ArgumentAlignment
 RSpec.describe ExtractI18n::Adapters::VueAdapter do
   specify "block content" do
-    view = template("div.foo\n  | Content\n")
+    view = template(%{<div class="foo">\n  Content\n</div>})
     output = run(view, file_key: "components")
-    expect(output[0]).to be == template(
+    compare output,
       <<~VIEW
-        div.foo
-          | {{ $t('components.content') }}
+        <div class="foo">
+          {{ $t('components.content') }}
+        </div>
       VIEW
-    )
   end
 
-  specify "attributes" do
-    view = template(%{div.foo(label="Title Here" title='Bla')\n  span\n})
-
+  specify 'interpolation' do
+    view = template <<~HTML
+      <div class="foo">
+        Find me in {{ some_variable.key }}
+      </div>
+    HTML
     output = run(view, file_key: "components")
-    expect(output[0]).to be == template(
+    compare output,
       <<~VIEW
-        div.foo(:label="$t('components.title_here')" :title="$t('components.bla')")
-          span
+        <div class="foo">
+          {{ $t('components.find_me_in_some_variable_k', { some_variable_key: (some_variable.key) }) }}
+        </div>
       VIEW
-    )
   end
 
-  specify "content with interpolation" do
-    view = template("div\n  | please click {{ here + 1 }}\n")
-
+  # title placeholder, foo-title, label description alt
+  specify 'title' do
+    view = template <<~HTML
+      <div class="foo" title="Foobar Foo">
+      </div>
+    HTML
     output = run(view, file_key: "components")
-    expect(output[0]).to be == template(
+    compare output,
       <<~VIEW
-        div
-          | {{ $t('components.please_click_here_1', { here_1: (here + 1) }) }}
+        <div class="foo" :title="$t('components.foobar_foo')">
+        </div>
       VIEW
-    )
-    expect(output[1]).to be == {
-      "components.please_click_here_1" => "please click {here_1}"
-    }
   end
 
-  specify 'ignore raw interpolated' do
-    view = template("| {{filename}}")
+  specify 'keep vue special tags' do
+    view = <<~HTML
+      <template>
+      <div :class="foo" v-bind:foo="Foobar Foo" :fooBar="fooBar" v-if="bla" @click.prevent="foo" stacked>
+        <BModal></BModal>
+      </div>
+      </template>
+
+      <script setup lang="ts">
+      fooBar
+      </script>
+    HTML
     output = run(view, file_key: "components")
-    expect(output[0]).to be == view
+    expect(output[0].gsub("\n", '')).to be == view.gsub("\n", '')
   end
 
-  specify "with html prefix" do
-    view = template("button.btn Speichern")
-    output = run(view, file_key: "components")
-    expect(output[0]).to be == template("button.btn {{ $t('components.speichern') }}")
-  end
-
-  specify "attribute keys whitelist" do
-    view = template('button(class="btn btn-outline-secondary" type="button" title="Toggle" data-toggle)')
-    output = run(view, file_key: "components")
-    expect(output[0]).to be == template(
-      %{button(class="btn btn-outline-secondary" type="button" :title="$t('components.toggle')" data-toggle)}
-    )
-  end
-
-  specify "don't translate dynamic keys" do
-    view = template('button(class="btn btn-outline-secondary" type="button" :title="toggle" data-toggle)')
-    output = run(view, file_key: "components")
-    expect(output[0]).to be == view
-  end
-
-  specify "arial-label" do
-    view = template('a(href="#" class="btn-clear" aria-label="Löschen" role="button")')
-    output = run(view, file_key: "components")
-    expect(output[0]).to be == template(
-      %[a(href="#" class="btn-clear" :aria-label="$t('components.loschen')" role="button")]
-    )
-  end
-
-  specify "label as first attribute" do
-    view = template('b-form-group(label="Sprache")')
-    output = run(view, file_key: "components")
-    expect(output[0]).to be == template(
-      %[b-form-group(:label="$t('components.sprache')")]
-    )
+  specify 'ignore dynamic' do
+    view = <<~HTML
+      <div>
+        {{ alreadyReplaced }}
+      </div>
+    HTML
+    output = run(template(view), file_key: "components")
+    compare output, view
   end
 
   def template(content)
     <<~DOC
-      <template lang="pug">
+      <template>
       #{content}
       </template>
     DOC
+  end
+
+  def compare(output, tpl)
+    expect(output[0].gsub("\n", '')).to be == template(tpl).gsub("\n", '')
   end
 end
