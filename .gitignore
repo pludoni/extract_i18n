@@ -6,5 +6,6 @@
 /pkg/
 /spec/reports/
 /tmp/
+/.idea/
 spec/.examples.txt
 Gemfile.lock

@@ -53,7 +53,8 @@ module ExtractI18n::Adapters
         else
           inner_source = i.children[0].loc.expression.source.gsub(/^#\{|}$/, '')
           interpolate_key = ExtractI18n.key(inner_source)
-          out_string += "%{#{interpolate_key}}"
+          # because we're using ICU, interpolation happens just with curly braces, no %
+          out_string += "{#{interpolate_key}}"
           interpolate_arguments[interpolate_key] = inner_source
         end
       end
@@ -77,7 +78,9 @@ module ExtractI18n::Adapters
 
     def ask_and_continue(i18n_key:, i18n_string:, interpolate_arguments: {}, node:)
       change = ExtractI18n::SourceChange.new(
-        i18n_key: "#{@file_key}.#{i18n_key}",
+        # we want the key to be the string itself so that we can extract it later
+        i18n_key: "#{i18n_string}",
+        i18n_string: "#{i18n_string}",
         i18n_string: i18n_string,
         interpolate_arguments: interpolate_arguments,
         source_line: node.location.expression.source_line,

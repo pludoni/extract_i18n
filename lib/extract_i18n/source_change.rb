@@ -28,7 +28,8 @@ module ExtractI18n
       interpolate_arguments:,
       source_line:,
       remove:,
-      t_template: %{I18n.t("%s"%s)},
+      # we are using our own _t method by default
+      t_template: %{_t("%s"%s)},
       interpolation_type: :ruby
     )
       @i18n_string = i18n_string
@@ -56,7 +57,8 @@ module ExtractI18n
       unless @source_line.include?("\n")
         s += "\n"
       end
-      s += PASTEL.cyan("add i18n: ") + PASTEL.blue("#{@key}: #{@i18n_string}")
+      # We are using a text extraction pipeline, so we don't need this line
+      # s += PASTEL.cyan("add i18n: ") + PASTEL.yellow("#{@key}: #{@i18n_string}")
       s
     end
 
@@ -66,6 +68,12 @@ module ExtractI18n
                  else
                    key
                  end
+      # let's not have dangling commas for strings with no arguments
+      @t_template = if i18n_arguments_string.length > 0
+                      %{_t("%s"%s)}
+                    else
+                      %{_t("%s")}
+                    end
       sprintf(@t_template, i18n_key, i18n_arguments_string)
     end
 

@@ -26,7 +26,8 @@ module ExtractI18n
         puts Diffy::Diff.new(original_content, result, context: 1).to_s(:color)
         if PROMPT.yes?("Save changes?")
           File.write(@file_path, result)
-          update_i18n_yml_file
+          # We are using a text extraction pipeline, so don't need this file
+          # update_i18n_yml_file
           puts PASTEL.green("Saved #{@file_path}")
         end
       end
