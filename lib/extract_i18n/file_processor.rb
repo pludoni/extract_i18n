@@ -89,6 +89,11 @@ module ExtractI18n
           end
         end
       end
+
+      # in case the file does not exist, we must make
+      # sure to create the intermediate folders
+      FileUtils.mkdir_p(File.dirname(@write_to))
+
       File.write(@write_to, base.to_yaml)
     end
 

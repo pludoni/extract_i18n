@@ -13,7 +13,7 @@ RSpec.describe ExtractI18n::FileProcessor do
     Dir.chdir(pwd)
   end
 
-  let(:yml) { 'locales.en.yml' }
+  let(:yml) { 'foo/bar/locales.en.yml' }
   before(:each) do
     allow_any_instance_of(TTY::Prompt).to receive(:yes?).and_return(true)
     allow_any_instance_of(TTY::Prompt).to receive(:no?).and_return(false)
