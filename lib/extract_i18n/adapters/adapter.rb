@@ -5,6 +5,7 @@ module ExtractI18n::Adapters
     def self.for(file_path)
       case file_path
       when /\.rb$/ then RubyAdapter
+      when /\.erb$/ then ErbAdapter
       when /\.slim$/ then SlimAdapter
       when /\.vue$/
         if File.read(file_path)[/lang=.pug./]
