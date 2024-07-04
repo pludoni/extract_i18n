@@ -22,9 +22,17 @@ module ExtractI18n
   self.ignorelist = [
     '_',
     '::',
+    'v-else',
+    'v-else-if',
+    %r{^\| },
+    %r{^#[^ ]+$},
     %r{^/}
   ]
   self.html_fields_with_plaintext = %w[title placeholder alt label aria-label modal-title]
+
+  def self.ignore?(string)
+    ExtractI18n.ignorelist.any? { |item| string.to_s[item] }
+  end
 
   def self.key(string, length: 25)
     string.strip.

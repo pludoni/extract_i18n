@@ -19,6 +19,9 @@ module ExtractI18n::Adapters
         if change.nil? # nothing to do
           return old_line
         end
+        if ExtractI18n.ignore?(change.i18n_string)
+          return old_line
+        end
 
         if @on_ask.call(change)
           change.i18n_t
