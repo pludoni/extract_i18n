@@ -37,7 +37,9 @@ module ExtractI18n::Adapters
           all_match
         end
       end
-      out
+      @new_content = out.split("\n")
+      check_javascript_for_strings!
+      @new_content.join("\n")
     end
 
     # nokogir::html can parse @click.prevent stuff, but transforms all CamelCase Attributes to kebab-case by default
@@ -133,6 +135,21 @@ module ExtractI18n::Adapters
         args[key] = stripped_arg[0]
       end
       [args, translation]
+    end
+
+    def check_javascript_for_strings!
+      lines = @new_content
+      # drop lines until <script
+      start = lines.find_index { |line| line[/^<script/] }
+      finish = lines.find_index { |line| line[/^<\/script/] }
+      return if start.nil? || finish.nil?
+
+      js_content = lines[(start + 1)...finish].join("\n")
+
+      js_adapter = ExtractI18n::Adapters::JsAdapter.new(file_key: @file_key, on_ask: @on_ask, options: @options)
+      js_replaced = js_adapter.run(js_content)
+
+      @new_content = lines[0..start] + js_replaced.split("\n") + lines[(finish)..-1]
     end
   end
 end

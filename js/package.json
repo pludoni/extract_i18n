@@ -1,0 +1,14 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/parser": "^7.24.7",
+    "recast": "^0.23.9",
+    "typescript": "^5.5.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.0"
+  }
+}

@@ -17,12 +17,16 @@ This Gem **supports** the following source files:
   - Caveats: because of limitations of the HTML/XML parser it will slightly transform the HTML, for example, self closing tags are expanded (e.g. ``<Component />`` will become ``<Component></Component>``). Also multi-line arrangements of attributes, tags etc. might produce unexpected results, so make sure to use Git and diff the result.
 - Vue Pug views
   - Pug is very similar to slim and thus relatively well extractable via Regexp.
+- Javascript string Literals by vendoring a small **nodeJS** script in ``js/find_string_tokens.js`` (requires node16+).
+    - Vue: Literal strings in script block (via bundled nodejs file)
+    - JS/TS: Literal strings
 - ERB views
   - by vendoring/extending https://github.com/ProGM/i18n-html_extractor (MIT License)
 
 CURRENTLY THERE IS **NO SUPPORT** FOR:
 
 - haml ( integrating https://github.com/shaiguitar/haml-i18n-extractor)
+- JS: Template-Literals
 
 But I am open to integrating PRs for those!
 
@@ -48,6 +52,14 @@ extract-i18n --locale de --yaml config/locales/unsorted.de.yml app/views/user
 
 If you prefer relative keys in slim views use ``--slim-relative``, e.g. ``t('.title')`` instead of ``t('users.index.title')``.
 I prefer absolute keys, as it makes copy pasting/ moving files much safer.
+
+To extract Vue/JS files, we usually put them in a namespace ``js.*`` and handle them with i18n-tasks as well, so to extract Vue-Components, or plain JS files:
+
+```
+extract-i18n --locale de --yaml config/locales/unsorted.de.yml -n js app/javascript/components/Foobar.vue
+```
+
+Will prefix the keys with ``js.components.foobar``. This system also switches the **interpolation format** from ``%{foo}`` to ``{foo}``, when handling Vue,JS,TS file.
 
 
 ## Contributing

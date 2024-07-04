@@ -79,6 +79,31 @@ RSpec.describe ExtractI18n::Adapters::VuePugAdapter do
     )
   end
 
+  specify "javascript inline block content" do
+    tpl = <<~VUE
+      <template lang="pug">
+      div
+        span
+      </template>
+
+      <script lang="ts" setup>
+        const translations = "Hallo Welt"
+      </script>
+    VUE
+    output = run(tpl, file_key: "components")
+
+    expect(output[0]).to be == <<~VUE
+      <template lang="pug">
+      div
+        span
+      </template>
+
+      <script lang="ts" setup>
+        const translations = t('components.hallo_welt')
+      </script>
+    VUE
+  end
+
   def template(content)
     <<~DOC
       <template lang="pug">

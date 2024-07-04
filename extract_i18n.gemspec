@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.version       = ExtractI18n::VERSION
   spec.authors       = ["Stefan Wienert"]
   spec.email         = ["info@stefanwienert.de"]
+  spec.metadata      = { "rubygems_mfa_required" => "true" }
 
   spec.summary       = %q{Extact i18n from Ruby files using Ruby parser and slim files using regex}
   spec.description   = %q{Extact i18n from Ruby files using Ruby parser and slim files using regex interactively}
@@ -20,10 +21,12 @@ Gem::Specification.new do |spec|
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  end
-  spec.bindir        = "exe"
-  spec.executables   << "extract-i18n"
+  end - ['js/build.js', 'js/package.json', 'js/yarn.lock', 'js/run.mjs']
+
+  spec.bindir = "exe"
+  spec.executables << "extract-i18n"
   spec.require_paths = ["lib"]
+  spec.required_ruby_version = '>= 2.7.0'
 
   spec.add_runtime_dependency 'nokogiri'
   spec.add_runtime_dependency 'parser', '>= 2.6'

@@ -7,6 +7,7 @@ module ExtractI18n::Adapters
       when /\.rb$/ then RubyAdapter
       when /\.erb$/ then ErbAdapter
       when /\.slim$/ then SlimAdapter
+      when /\.ts$/, /\.js$/, /\.mjs/, /\.jsx$/ then JsAdapter
       when /\.vue$/
         if File.read(file_path)[/lang=.pug./]
           VuePugAdapter
