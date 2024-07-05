@@ -44,8 +44,8 @@ module ExtractI18n
 
   def self.file_key(path)
     path.gsub(strip_path, '').
-      gsub(%r{^/|/$}, '').    # remove leading and trailing slashes
-      gsub(/\.[a-z]+$/, '').  # remove file extension
+      gsub(%r{^/|/$}, '').      # remove leading and trailing slashes
+      gsub(/\.[a-z\.]+$/, '').  # remove file extension
       gsub(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2'). # convert camelcase to underscore
       gsub(/([a-z\d])([A-Z])/, '\1_\2').
       gsub('/_', '.').
