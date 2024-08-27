@@ -5,7 +5,7 @@ require "extract_i18n/version"
 require "zeitwerk"
 loader = Zeitwerk::Loader.for_gem
 loader.inflector.inflect(
-  "html_extractor"   => "HTMLExtractor",
+  "html_extractor" => "HTMLExtractor",
 )
 loader.setup # ready!
 
@@ -17,7 +17,9 @@ module ExtractI18n
   self.strip_path = %r{^app/(javascript|controllers|views)|^lib|^src|^app}
 
   # ignore for .rb files: ignore those file types
-  self.ignore_hash_keys = %w[class_name foreign_key join_table association_foreign_key key]
+  self.ignore_hash_keys = %w[class_name foreign_key join_table
+                             association_foreign_key key class style type disabled format username
+                             password layout]
   self.ignore_functions = %w[where order group select sql]
   self.ignorelist = [
     '_',
@@ -25,6 +27,8 @@ module ExtractI18n
     'v-else',
     'v-else-if',
     '&nbsp;',
+    'https:',
+    'http:',
     %r{^#[^ ]+$},
     %r{^/},
     %r{^(mdi|fa|fas|far|icon)-},

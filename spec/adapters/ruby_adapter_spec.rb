@@ -40,6 +40,16 @@ RSpec.describe ExtractI18n::Adapters::RubyAdapter do
     ]
   end
 
+  specify 'Ignore class and style attributes' do
+    file = <<~DOC
+      div(class: "foo", style: "bar") {
+      }
+    DOC
+    expect(run(file)).to be == [
+      file, {}
+    ]
+  end
+
   specify 'Ignore active record functions' do
     file = <<~DOC
       sql = User.where("some SQL Condition is true").order(Arel.sql("Foobar"))
