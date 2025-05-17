@@ -17,6 +17,10 @@ module ExtractI18n
           raise NotImplementedError
         end
 
+        def to_s
+          text
+        end
+
         attr_writer :key
 
         def key
