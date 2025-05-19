@@ -98,7 +98,7 @@ module ExtractI18n
     end
 
     def original_content
-      @original_content ||= File.read(@file_path)
+      File.read(@file_path)
     end
   end
 end
