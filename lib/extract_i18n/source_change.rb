@@ -34,7 +34,7 @@ module ExtractI18n
       @i18n_string = i18n_string
       @key = i18n_key
       @interpolate_arguments = interpolate_arguments
-      @source_line = source_line
+      @source_line = source_line.nil? ? "" : source_line
       @remove = remove
       @t_template = t_template
       @interpolation_type = interpolation_type
@@ -42,9 +42,9 @@ module ExtractI18n
 
     def format
       s = ""
-      s += PASTEL.cyan("replace:  ") + PASTEL.blue(@source_line).
+      s += PASTEL.cyan("\nreplace:  ") + PASTEL.blue(@source_line).
            gsub(@remove, PASTEL.red(@remove))
-      unless @source_line.include?("\n")
+      unless @source_line.end_with?("\n")
         s += "\n"
       end
       if @source_line[@remove]
@@ -53,7 +53,7 @@ module ExtractI18n
       else
         s += PASTEL.cyan("with:     ") + PASTEL.green(i18n_t)
       end
-      unless @source_line.include?("\n")
+      unless @source_line.end_with?("\n")
         s += "\n"
       end
       s += PASTEL.cyan("add i18n: ") + PASTEL.blue("#{@key}: #{@i18n_string}")
