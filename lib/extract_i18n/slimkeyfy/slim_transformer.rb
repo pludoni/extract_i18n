@@ -93,8 +93,9 @@ module ExtractI18n
             t_template: "#{before}#{html_tag}t('%s'%s)#{after}"
           )
           final_line = yield(change)
-          return parse_html_arguments(final_line, &block)
-        end
+          if final_line != @word.indentation + line
+            return parse_html_arguments(final_line, &block)
+          end
       end
       if final_line == line
         @word.indentation + final_line
