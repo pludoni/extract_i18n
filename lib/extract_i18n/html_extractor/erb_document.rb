@@ -70,9 +70,15 @@ module ExtractI18n
 
           ERB_REGEXPS.each do |regexp|
             regexp.replace!(text) do |string_format, data|
-              key = SecureRandom.uuid
-              erb_directives[key] = data[:inner_text]
-              string_format % { inner_text: key }
+              code = data[:inner_text].strip
+              # skip t(...) / I18n.t(...) calls
+              if code =~ /\A(?:I18n\.)?t\(\s*(['"]).+?\1\s*\)\z/
+                "<%=#{data[:inner_text]}%>"
+              else
+                key = SecureRandom.uuid
+                erb_directives[key] = data[:inner_text]
+                string_format % { inner_text: key }
+              end
             end
           end
           erb_directives
