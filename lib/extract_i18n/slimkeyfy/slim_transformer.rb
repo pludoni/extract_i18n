@@ -96,6 +96,7 @@ module ExtractI18n
           if final_line != @word.indentation + line
             return parse_html_arguments(final_line, &block)
           end
+        end
       end
       if final_line == line
         @word.indentation + final_line
